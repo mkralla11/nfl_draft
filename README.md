@@ -10,7 +10,7 @@ Please ensure the following are installed and working properly:
       * osx: $ brew install redis
               <!-- open 2 new terminal tabs/cmd's and run one command on each -->
              $ redis-server /usr/local/etc/redis.conf
-             $ env TERM_CHILD=1 QUEUE=* INTERVAL=1 bundle exec rake resque:work
+             $ bundle exec sidekiq
 
 
 ## Usage

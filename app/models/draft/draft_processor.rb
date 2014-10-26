@@ -18,20 +18,20 @@ module Draft
     end
 
     # start method handles single manual,
-    # single random, and automatic drafting
+    # single random, and "live" drafting
     # dispatching accordingly
     def self.start(params)
       if Ownership.has_drafts_left?
+        # only send official start message when draft start date is blank
+        $redis.publish('draft.pub_start', params.to_json) unless SiteConfig.draft_in_progress?
         SiteConfig.start_draft!
         if params["single"] == "true"
           ownership = Team.make_next_draft!(params)
           $redis.publish('draft.pub_draft_made', params.merge(:ownership=>ownership, :next_pick=>Ownership.next_to_draft).to_json)
           SiteConfig.pause_draft!
         else
-          Resque.enqueue(DraftWorker, params.to_json)
+          DraftWorker.perform_async(params.to_json)
         end
-        # only send official start message when draft start date is blank
-        $redis.publish('draft.pub_start', params.to_json) unless SiteConfig.draft_in_progress?
       else
         $redis.publish('draft.pub_completed', params.to_json)
       end

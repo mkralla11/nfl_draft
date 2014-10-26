@@ -7,7 +7,7 @@ gem 'puma'
 gem 'redis'
 gem 'smarter_csv'
 gem 'activerecord-import', '>= 0.4.0'
-gem 'resque'
+gem 'sidekiq'
 
 gem 'sinatra', require: false
 gem 'slim'

@@ -1,9 +1,8 @@
-require 'resque/errors'
 class DraftWorker
-  # include Sidekiq::Worker
-  @queue = :draft_worker_queue
+  include Sidekiq::Worker
+  sidekiq_options :retry => false
 
-  def self.perform(params)
+  def perform(params)
     SiteConfig.set_worker_pid(Process.pid)
     params = JSON.parse(params)
     speed = params.try(:[], "speed").presence || 2.0
@@ -16,7 +15,7 @@ class DraftWorker
 
     redis.publish('draft.pub_draft_complete', params)
 
-    rescue Resque::TermException
+    rescue SignalException => e
       $redis.publish('draft.pub_pause', params.to_json)
       SiteConfig.pause_draft!
   end
