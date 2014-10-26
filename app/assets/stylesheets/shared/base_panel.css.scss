@@ -1,0 +1,48 @@
+.base-panel{
+  min-width: 255px;
+  position: absolute;
+  overflow-y: auto;
+  overflow-x: visible;
+}
+
+.base-pod{
+  opacity:0.92;
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: bold;
+  background-color: #222;
+  box-shadow: 0 0 3px 4px rgba(0, 0, 0, 0.13);
+  height: 60px;
+  margin-bottom: 8px;
+  padding: 12px 24px;
+  width: 235px;
+  position: relative;
+  background-color: #222;
+  color: #fcfcfc;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.35);
+  text-align: center;
+
+  .team-round-num, .team-pick-num{
+    background-color: #434343;
+    padding: 2px 3px 0 4px;
+    position:absolute;
+    top:0;
+    cursor:help;
+  }
+  .team-round-num{
+    left:0;
+  }
+  .team-pick-num{
+    right:0;
+  }
+
+  .description {
+    color: #868686;
+    font-size: 12px;
+    font-weight: normal;
+  }
+}
+
+
+/* Don't show shadows when selecting text */
+::-moz-selection { background: #5af; color: #fff; text-shadow: none; }
+::selection { background: #5af; color: #fff; text-shadow: none; }

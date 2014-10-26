@@ -1,0 +1,19 @@
+.control-panel {
+  background-color: #ebebeb;
+  bottom: 0;
+  box-shadow:0 0 3px 4px rgba(0, 0, 0, 0.13);
+  left: 2%;
+  max-width: 560px;
+  min-width: 368px;
+  opacity: 0.92;
+  padding: 1%;
+  position: absolute;
+  text-align: center;
+  width: 44%;
+  .btn{
+    margin: 1% 2% 2% 1%;
+    min-width: 165px;
+    width: 45%;
+    padding: 2% 4%;
+  }
+}

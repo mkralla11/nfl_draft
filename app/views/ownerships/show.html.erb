@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Team:</strong>
+  <%= @ownership.team_id %>
+</p>
+
+<p>
+  <strong>Player:</strong>
+  <%= @ownership.player_id %>
+</p>
+
+<p>
+  <strong>Round:</strong>
+  <%= @ownership.round %>
+</p>
+
+<p>
+  <strong>Pick:</strong>
+  <%= @ownership.pick %>
+</p>
+
+<%= link_to 'Edit', edit_ownership_path(@ownership) %> |
+<%= link_to 'Back', ownerships_path %>

@@ -1,0 +1,19 @@
+body{
+  background-color: transparent;
+  height: 100%; 
+  margin: 0; 
+  padding: 0;
+}
+
+html{
+  background: image-url("fb-bg.jpg") no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  height: 100%;
+}
+
+.btn{
+  border-radius:0;
+}

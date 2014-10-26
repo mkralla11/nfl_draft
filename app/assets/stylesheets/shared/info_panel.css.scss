@@ -1,0 +1,61 @@
+.info-panel{
+  left: 26%;
+  line-height: 0;
+  opacity: 0.95;
+  padding: 0 5px 5px;
+  position: absolute;
+  text-align: center;
+  top: 0;
+  width: 48%;
+}
+
+.status-pod, .commentary-pod{
+  display: inline-block;
+  height: 78px;
+  min-width: 236px;
+  opacity: 0.84;
+  padding: 10px;
+  width: 46%;
+  line-height: 25px;
+  vertical-align: text-top;
+  background-color:#090909;
+}
+
+.status-pod{
+  color:#a9ffd2;
+  font-size:22px;
+  font-weight: bold;
+  .less{
+    color: #ffffff;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: normal;
+    margin-right: 14px;
+  }
+}
+
+.commentary-pod{
+  color:#ffffff;
+  line-height: 16px;
+  font-size: 12px;
+  overflow-y: scroll;
+  text-align: left;
+  .team-name{
+    color:#31ff2d;
+  }
+  .player-name{
+    color:#31ff2d;;
+  }
+  p{
+    margin-bottom:4px;
+  }
+  .notice{
+    color:yellow;
+  }
+  .error{
+    color:red;
+  }
+  .success{
+    color:#31ff2d;;
+  }
+}

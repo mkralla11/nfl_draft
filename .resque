@@ -1,0 +1,4 @@
+queues: 'high,med,low'
+interval: 1
+daemon: true
+timeout: 5

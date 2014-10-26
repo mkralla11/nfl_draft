@@ -1,0 +1,27 @@
+.ownership-panel {
+  bottom: 0;
+  height: 32%;
+  min-width: 301px;
+  opacity: 0.9;
+  position: absolute;
+  right: 4%;
+  width: 37%;
+}
+
+.ownership-pod{
+  background-color: #a295dc;
+  height: auto;
+  min-width: 286px;
+  padding: 10px 10px 3px;
+  width: 99%;
+  .base-pod{
+    width:49%;
+    display: inline-block;
+    height:auto;
+    vertical-align: text-top; 
+  }
+}
+
+.draft-pod{
+  
+}
