@@ -5,7 +5,6 @@ REALTIMEDRAFT.TeamPod = function(attrs){
   var self = this;
   self.attrs = attrs;
   this.element.data("id", attrs.team_id);
-
   var abs_coords = {}
 
 
@@ -55,6 +54,10 @@ REALTIMEDRAFT.TeamPod = function(attrs){
     self.element.animate({
       left: left + "px",
       top: top + "px"
-    }, 250, complete_cb);
+    }, calculateSpeed(250), complete_cb);
   };
+
+  function calculateSpeed(s){
+    return (s / 2) * REALTIMEDRAFT.speed;
+  }
 };

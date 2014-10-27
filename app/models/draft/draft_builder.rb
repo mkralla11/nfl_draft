@@ -24,7 +24,7 @@ module Draft
     end
 
     def self.control_panel_init(sse)
-      # sse.write(self.control_panel_json, {event: 'draft.control_panel_init'})
+      sse.write(self.control_panel_json, {event: 'draft.control_panel_init'})
     end
 
     def self.info_panel(sse)
@@ -36,8 +36,11 @@ module Draft
     end
 
     def self.control_panel_json
-
+      {:draft_state=>SiteConfig.draft_state.as_string, :speed=>discern_speed}.to_json
     end
 
+    def self.discern_speed
+      $redis.get("speed").try(:to_f) || 2 
+    end
   end
 end

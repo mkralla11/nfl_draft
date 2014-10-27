@@ -15,8 +15,8 @@ module Api
         end
       end
 
-      def update
-        Draft::DraftProcessor.update(draft_params)
+      def update_speed
+        Draft::DraftProcessor.update_speed(draft_params)
         render :json=>{"message"=>"success"}, :status=>:ok
       end
 

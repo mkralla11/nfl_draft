@@ -75,6 +75,10 @@ REALTIMEDRAFT.OwnershipPod = function(attrs){
     self.element.animate({
       left: left + "px",
       top: top + "px"
-    }, 250, complete_cb);
+    }, calculateSpeed(250), complete_cb);
   };
+
+  function calculateSpeed(s){
+    return (s / 2) * REALTIMEDRAFT.speed;
+  }
 };

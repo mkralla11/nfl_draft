@@ -12,6 +12,8 @@
  *
  *= require_self
  *= require ../../../vendor/assets/bootstrap-3.2.0/css/bootstrap.min
+ //= require_tree ../../../vendor/assets/range_slider
+ *= require_tree ../../../vendor/assets/stylesheets/shared
  *= require_tree ./shared
  */
 

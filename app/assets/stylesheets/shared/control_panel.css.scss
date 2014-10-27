@@ -17,3 +17,32 @@
     padding: 2% 4%;
   }
 }
+
+.speed-wrapper{
+  margin-bottom:7px;
+
+  .speed-display-outer{
+    min-width:100px;
+    min-height:20px;
+    .speed-label, .speed-display, .unit-label{
+      display:inline-block;
+      margin-right:2px;
+    }
+    .speed-label {
+      color: #666666;
+      font-size: 9px;
+      font-style: italic;
+      margin-right: 8px;
+    }
+    .speed-display, .unit-label{
+      font-weight: bold;
+    }
+    .unit-label{
+      font-size:10px;
+    }
+  }
+
+  .speed-slider {
+    margin-top: 6px;
+  }
+}

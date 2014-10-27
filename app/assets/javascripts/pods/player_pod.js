@@ -48,7 +48,7 @@ REALTIMEDRAFT.PlayerPod = function(attrs){
     var complete_cb = options["complete"];
     self.element.animate({
       top:"0px"
-    }, 700, complete_cb);
+    }, calculateSpeed(700), complete_cb);
   }
 
 
@@ -70,6 +70,11 @@ REALTIMEDRAFT.PlayerPod = function(attrs){
     self.element.animate({
       left: left + "px",
       top: top + "px"
-    }, 250, complete_cb);
+    }, calculateSpeed(250), complete_cb);
   };
+
+
+  function calculateSpeed(s){
+    return (s / 2) * REALTIMEDRAFT.speed;
+  }
 };

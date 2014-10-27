@@ -13,8 +13,9 @@
 //= require jquery
 //= require jquery_ujs
 //= require ../../../vendor/assets/bootstrap-3.2.0/js/bootstrap.min
+//= require_tree ../../../vendor/assets/range_slider
+//= require_tree ../../../vendor/assets/javascripts/shared
 //= require javascript_core_ext
-//= require scroll_to
 //= require realtime_draft
 //= require panels/control_panel
 //= require pods/team_pod
@@ -28,4 +29,3 @@
 //= require panels/ownership_panel
 //= require draft_builder
 //= require main
-// require live_draft

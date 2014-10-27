@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       resources :players, :only=>[:show, :index]
       resources :draft do
         collection do
+          post :update_speed
           post :start
           post :pause
           post :restart
