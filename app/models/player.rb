@@ -7,6 +7,7 @@ class Player < ActiveRecord::Base
   scope :undrafted, ->{
     select(
       "
+        players.id as id,
         players.id as player_id, 
         players.name as player_name, 
         pos.name as position_name
@@ -18,6 +19,8 @@ class Player < ActiveRecord::Base
       "
     ).where(
       "o.id is NULL"
+    ).order(
+      "position_name asc"
     )
   }
 

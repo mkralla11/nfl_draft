@@ -17,6 +17,7 @@ module Draft
         Player.import_csv
         Team.import_csv
         Ownership.import_csv
+        SiteConfig.init
       end
 
 

@@ -14,7 +14,7 @@ class SiteConfig < ActiveRecord::Base
   validates_uniqueness_of :name
   validate :approved_name?
 
-  def self.reset_all
+  def self.reset_all_tables
     ActiveRecord::Base.descendants.each do |model|
       next if model.table_name == "schema_migrations"
       model.empty_and_reset_table
@@ -56,6 +56,7 @@ class SiteConfig < ActiveRecord::Base
 
   def self.restart_draft!
     SiteConfig.draft_start_date.update_column(:as_datetime, nil)
+    Ownership.update_all(:picked_at=>nil, :player_id=>nil)
     SiteConfig.draft_state.update_column(:as_string, "stop")
   end
 

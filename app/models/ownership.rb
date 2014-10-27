@@ -3,10 +3,15 @@ class Ownership < ActiveRecord::Base
   belongs_to :player
   belongs_to :team
 
+  def self.undrafted
+    where("ownerships.picked_at IS NULL").order("ownerships.pick ASC")
+  end
+
 
   def self.completed_drafts
     select(
       "
+        ownerships.id as id,
         ownerships.id as ownership_id,
         players.id as player_id, 
         players.name player_name, 

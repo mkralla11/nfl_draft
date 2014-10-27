@@ -2,7 +2,7 @@ module Api
   module V1
     class DraftController < ApplicationController
       include ActionController::Live
-      # around_filter :lock, :except=>:feed
+      around_filter :lock, :except=>:feed
       before_filter :draft_completion_filter, :only=>[:start, :update, :pause]
 
       # post

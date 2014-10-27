@@ -1,3 +1,7 @@
+Dir.glob(Rails.root.join('app/models/concerns/importer/*.rb')).each do |x| require x end
+Dir.glob(Rails.root.join('app/models/concerns/draft/*.rb')).each do |x| require x end
+Dir.glob(Rails.root.join('app/models/*.rb')).each do |x| require x end
+
 namespace :draft_init do
 
   # delegate all import tasks to DraftProcessor, so the tasks
@@ -21,7 +25,23 @@ namespace :draft_init do
     task :order => :environment do 
       Order.import_csv
     end 
+
+    task :site_configs => :environment do
+      SiteConfig.init
+    end
   end
 
+  task :reset_all_tables => :environment do
+    SiteConfig.reset_all_tables
+  end
+
+  task :restart_draft => :environment do
+    SiteConfig.restart_draft!
+  end
+
+
+  task :simulate_draft => :environment do
+    Draft::DraftProcessor::execute_full_draft
+  end
 
 end

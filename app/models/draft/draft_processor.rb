@@ -1,8 +1,9 @@
 module Draft
   class DraftProcessor
+    include Draft::FullDrafter
 
     def self.bind_events(sse)
-      redis = Redis::Namespace.new("my_app", :redis => Redis.new)
+      redis = Redis::Namespace.new("nfl_draft", :redis => Redis.new)
       redis.psubscribe('draft.*') do |on|
         on.pmessage do |pattern, event, data|
           self.dispatch(event, sse, data)

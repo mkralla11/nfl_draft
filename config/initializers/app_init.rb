@@ -6,8 +6,7 @@ if !defined?(::Rake)
     config.after_initialize do
       MUTEX.synchronize do
         unless SiteConfig.draft_start_date.persisted?
-          SiteConfig.reset_all
-          SiteConfig.init
+          SiteConfig.reset_all_tables
           Draft::DraftBuilder.import_all
         end
       end
