@@ -20,11 +20,18 @@ REALTIMEDRAFT.CommentaryPod = function(){
   });
 
   self.update = function(attrs){
-    if(attrs != null){
+    if(attrs != null && attrs.next_pick != null){
       prevTeamHtml(attrs);
       randomPrevTeamCommentary(attrs);
       nextTeamHtml(attrs);
     }
+    else{
+      draftFinished();
+    }
+  }
+
+  function draftFinished(){
+    html.push("<span class='green'>Draft Complete</span>")
   }
 
   function prevTeamHtml(attrs){
@@ -60,7 +67,7 @@ REALTIMEDRAFT.CommentaryPod = function(){
      "Rick, I'm not sure if that was the best choice for that team...",
      "That was definitely a great pick!",
      "Maybe that pick should have been a little more thought out, Bob.",
-     "Well, Rick, that was definitely the player I would have chosen from the remaining pool",
+     "Well, Rick, that was definitely the player I would have chosen from the remaining pool.",
      "Bob, this draft is really heating up!",
      "A few more picks and that team will be set up for an excellent season, Bob.",
      "This is one of the best set of players I've ever seen in a draft, Rick.",

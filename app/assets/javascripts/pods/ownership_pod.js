@@ -1,7 +1,7 @@
 REALTIMEDRAFT.OwnershipPod = function(attrs){
   "use strict";
-  this.element = $("<div class='ownership-pod base-pod'>");
   var self = this;
+  self.element = $("<div class='ownership-pod base-pod'>");
   self.attrs = attrs;
   if(attrs != null){
     self.element.data("id", attrs.ownership_id);
@@ -77,6 +77,14 @@ REALTIMEDRAFT.OwnershipPod = function(attrs){
       top: top + "px"
     }, calculateSpeed(250), complete_cb);
   };
+
+  self.dispose = function(){
+    self.element.unbind();
+    self.element.remove();
+    if(self.player_pod!=null){self.player_pod.dispose()};
+    if(self.team_pod!=null){self.team_pod.dispose()};
+  }
+
 
   function calculateSpeed(s){
     return (s / 2) * REALTIMEDRAFT.speed;

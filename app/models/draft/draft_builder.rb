@@ -2,13 +2,14 @@ module Draft
   class DraftBuilder
     include Draft::Setup
 
-    def self.build_all_panels(sse)
-      self.startup(sse)
+    def self.init(sse, options={})
+      ActiveRecord::Base.connection.query_cache.clear if options[:restart]
       self.player_panel_init(sse)
       self.ownership_panel_init(sse)
       self.team_panel_init(sse)
       self.control_panel_init(sse)
       self.info_panel(sse)
+      self.startup(sse)
     end
 
     def self.player_panel_init(sse)

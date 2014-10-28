@@ -32,7 +32,12 @@ module Api
 
       # post
       def restart
-
+        if SiteConfig.can_restart_draft?
+          Draft::DraftProcessor.restart(draft_params)
+          render :json=>{"message"=>"success"}, :status=>:ok
+        else
+          render :json=>{:notice=>"The draft could not be restarted. Please pause the draft before restarting."}, :status=>422
+        end
       end
 
 
@@ -41,7 +46,7 @@ module Api
         sse = SSE.new(response.stream)
 
         begin
-          Draft::DraftBuilder.build_all_panels(sse)
+          Draft::DraftBuilder.init(sse)
           Draft::DraftProcessor.bind_events(sse)
         rescue IOError
         # 

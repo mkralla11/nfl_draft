@@ -54,7 +54,13 @@ module Draft
       $redis.publish('draft.pub_pause', {}.to_json);
     end
 
+
+    def self.restart(params)
+      SiteConfig.restart_draft!
+      $redis.publish('draft.pub_restart', params.to_json)
+    end
     
+
 
 
     # All of the methods below handle
@@ -73,6 +79,10 @@ module Draft
       sse.write(params.to_json, {event: 'draft.pub_pause'})
     end
 
+
+    def self.pub_restart(sse, params)
+      Draft::DraftBuilder.init(sse, {:restart=>true})
+    end
 
     def self.pub_draft_made(sse, params)
       # pub_draft_made event params include

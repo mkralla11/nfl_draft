@@ -35,18 +35,23 @@ REALTIMEDRAFT.ControlPanel = function(){
 
   function build(){
     REALTIMEDRAFT.es.addEventListener("draft.control_panel_init", function(e){
-      if(self.buildStateBtn != null){return false;};
-      
       attrs = JSON.parse(e.data);
       self.draft_state = attrs.draft_state || "stop";
       REALTIMEDRAFT.speed = attrs.speed || 2.0;
-      buildSpeedDisplay();
-      buildSpeedSlider();
-      buildSpeedWrapper();
-      buildStateBtn();
-      buildRestartBtn();
-      buildRandBtn();
-      buildManualBtn();
+
+      if(self.draft_state_btn == null){
+        buildSpeedDisplay();
+        buildSpeedSlider();
+        buildSpeedWrapper();
+        buildStateBtn();
+        buildRestartBtn();
+        buildRandBtn();
+        buildManualBtn();
+      }
+      else{
+        updateAllBtns();
+        pubUpdateSpeed();
+      }
     });
   };
 
@@ -181,7 +186,7 @@ REALTIMEDRAFT.ControlPanel = function(){
   */
 
   function buildManualBtn(){
-    self.draft_manual_btn =  $("<div class='draft-manual-btn btn btn-default'>Single Manual Draft</div>");
+    self.draft_manual_btn =  $("<div title='Not yet implemented.' data-infotip='default' data-placement='right' class='draft-manual-btn btn btn-default'>Single Manual Draft</div>");
     updateManualBtn();
     bindManualBtn();
     self.element.append(self.draft_manual_btn);
@@ -200,14 +205,7 @@ REALTIMEDRAFT.ControlPanel = function(){
   }
 
   function bindManualBtn(){
-    // self.draft_rand_btn.on("click",function(){
-    //   $.ajax({
-    //     type: "POST",
-    //     url: "/draft/start",
-    //     dataType: "json",
-    //     data: {'single': true, 'pick-type': "random"}
-    //   });
-    // });
+
   };
 
 

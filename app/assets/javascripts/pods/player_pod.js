@@ -74,6 +74,11 @@ REALTIMEDRAFT.PlayerPod = function(attrs){
   };
 
 
+  self.dispose = function(){
+    self.element.unbind();
+    self.element.remove();
+  }
+
   function calculateSpeed(s){
     return (s / 2) * REALTIMEDRAFT.speed;
   }

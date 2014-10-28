@@ -36,9 +36,7 @@ REALTIMEDRAFT.DraftBuilder = function(){
     self.element.append(info_panel.element);
     $('body').append(self.element);
     self.element.hide();
-    self.element.fadeIn(700, function(){
-      prepNextDraft(startup);
-    });
+    self.element.fadeIn(700);
   }
 
 
@@ -46,8 +44,8 @@ REALTIMEDRAFT.DraftBuilder = function(){
   function prepNextDraft(attrs){
     self.next_team = team_panel.selectTeamPod(attrs.next_pick);
     if(self.next_team == null){
-      alert("The Draft is complete. Please restart the draft.");
-      return false;
+      // alert("The Draft is complete. Please restart the draft.");
+      return null;
     }
     draft_pod = new REALTIMEDRAFT.OwnershipPod();
     
@@ -92,7 +90,11 @@ REALTIMEDRAFT.DraftBuilder = function(){
 
   function bindFeed(){
     REALTIMEDRAFT.es.addEventListener("draft.startup", function(e){
+      disposeCenterPod();
       startup = JSON.parse(e.data);
+      draft_pod = prepNextDraft(startup);
+      self.element.append(draft_pod.element);
+      draft_pod.centerPod();
     });
 
     REALTIMEDRAFT.es.addEventListener("draft.pub_draft_made", function(e){
@@ -125,6 +127,7 @@ REALTIMEDRAFT.DraftBuilder = function(){
     player_pod.setRelPos();
     player_pod.setAbsFromRel();
     player_pod.animateToTop({complete: function(){
+      var the_attrs = attrs;
       player_pod.setAbsPos();
       player_panel.popPlayerPod(attrs.ownership);
       player_pod.appendAtPos();
@@ -132,12 +135,13 @@ REALTIMEDRAFT.DraftBuilder = function(){
       var own_panel = ownership_panel;
       player_pod.moveToDraftPod(d_pod, {
         complete: function(){
+          var attrs = the_attrs;
           var p_pod = player_pod;
           var o_panel = own_panel;
           d_pod.mergePlayer(p_pod);
           d_pod.moveToOwnershipPanel(ownership_panel, {
             complete: function(){
-              ownership_panel.mergeOwnership(d_pod);
+              ownership_panel.mergeOwnership(d_pod, attrs);
               complete_cb.call();
             }
           });
@@ -145,4 +149,17 @@ REALTIMEDRAFT.DraftBuilder = function(){
       );
     }});
   };
+
+  // can't just call dispose() on draft_pod
+  // as it still has reference to the element that
+  // was just merged with ownership panel,
+  // but if the user switches tabs in the browser,
+  // and then switches back, the center pod
+  // could potentially be orphaned :(
+  function disposeCenterPod(){
+    draft_pod = null;
+    var orphaned_center_pod = $(".draft-layout > .ownership-pod");
+    orphaned_center_pod.unbind();
+    orphaned_center_pod.remove();
+  }
 };

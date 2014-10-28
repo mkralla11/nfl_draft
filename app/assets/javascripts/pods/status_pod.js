@@ -17,12 +17,12 @@ REALTIMEDRAFT.StatusPod = function(){
 
   self.update = function(attrs){
     self.attrs = attrs;
-    if(attrs != null){
+    if(attrs.next_pick != null){
       self.pick_num_e.html("<span class='less'>Pick </span> " + self.attrs.next_pick.pick);
       self.round_num_e.html("<span class='less'>Round </span> " + self.attrs.next_pick.round);
     }
     else{
-      self.pick_num_e.text("Draft Finished");
+      self.pick_num_e.html("<span class='green'>Draft Complete</span>");
       self.round_num_e.text("");
     }
   };

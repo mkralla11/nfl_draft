@@ -1,10 +1,10 @@
 var REALTIMEDRAFT = REALTIMEDRAFT || {};
 REALTIMEDRAFT.TeamPod = function(attrs){
   "use strict";
-  this.element = $("<div class='team-pod base-pod'>");
   var self = this;
+  self.element = $("<div class='team-pod base-pod'>");
   self.attrs = attrs;
-  this.element.data("id", attrs.team_id);
+  self.element.data("id", attrs.team_id);
   var abs_coords = {}
 
 
@@ -56,6 +56,12 @@ REALTIMEDRAFT.TeamPod = function(attrs){
       top: top + "px"
     }, calculateSpeed(250), complete_cb);
   };
+
+  self.dispose = function(){
+    self.element.unbind();
+    self.element.remove();
+  }
+
 
   function calculateSpeed(s){
     return (s / 2) * REALTIMEDRAFT.speed;

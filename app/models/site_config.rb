@@ -44,7 +44,10 @@ class SiteConfig < ActiveRecord::Base
   end
 
   # could have used state_machine gem for this,
-  # but figured it was overkill
+  # but figured it was overkill, I also am not
+  # a huge fan of using that gem because too
+  # many times I have see it ruin a project
+  # due to miss-use/overuse of callbacks
   def self.start_draft!
     SiteConfig.draft_start_date.update_column(:as_datetime, DateTime.now) if SiteConfig.draft_state.as_string.blank?
     SiteConfig.draft_state.update_column(:as_string, "start")
@@ -54,6 +57,9 @@ class SiteConfig < ActiveRecord::Base
     SiteConfig.draft_state.update_column(:as_string, "pause")
   end
 
+
+  # does NOT drop all records, simply wipes start date of draft in site config,
+  # and wipes picked_at and player_id from ownership
   def self.restart_draft!
     SiteConfig.draft_start_date.update_column(:as_datetime, nil)
     Ownership.update_all(:picked_at=>nil, :player_id=>nil)
@@ -66,6 +72,10 @@ class SiteConfig < ActiveRecord::Base
 
   def self.can_pause_draft?
     SiteConfig.draft_started?
+  end
+
+  def self.can_restart_draft?
+    SiteConfig.draft_paused?
   end
 
   def self.draft_in_progress?
