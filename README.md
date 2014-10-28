@@ -64,13 +64,13 @@ There's no need to run any of the importer tasks because the app initializes the
 
 There are a surplus of tasks that can be explore if you so desire (the names should be pretty self-explanatory):
 
-draft_init:reset_all_tables
-draft_init:import:all
-draft_init:import:players
-draft_init:import:teams
-draft_init:import:order
-draft_init:import:site_configs
-draft_init:simulate_draft
-draft_init:restart_draft
+* draft_init:reset_all_tables
+* draft_init:import:all
+* draft_init:import:players
+* draft_init:import:teams
+* draft_init:import:order
+* draft_init:import:site_configs
+* draft_init:simulate_draft
+* draft_init:restart_draft
 
 
