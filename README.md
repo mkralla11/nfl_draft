@@ -4,6 +4,8 @@ An Nfl Draft application demonstrating the use of ActionController::Live, Server
 
 ## Notes
 
+If you don't care about the interesting details that encompase this application, scroll down to the Requirements and Installation section to get started.
+
 The goal of this application was to explore newer rails features, as well as
 explore other lesser known yet awesome parts of rails. I wanted to be able
 to allow users to experience a nfl draft as it would occur in the real world,
@@ -25,9 +27,10 @@ I did test out Sidekiq in place of Resque, but then soon realized the big hype a
 
 As for bugs, I witnessed only two. The first was when a user changes tabs while a draft is occurring, and then switches back to the live draft. This has to do with the SSE connection sometimes 'reconnecting' randomly on browser tab switching, causing a re-init of the app. I was able to mitigate that problem with some simple checks. Along those same lines, the queue I implemented on the frontend would build up when a user switched tabs, and then when they refocused the draft tab and paused the draft, the queue would continue dispersing the remaining drafts in the queue (not really an issue, as this is what 'should' technically happen). The second bug occurred when I manually stopped and restarted the server. Obviously this wouldn't happen (regularly) in a solid production environment, and even if it did, proper deployment strategies would be in place to swap out live draft workers correctly (currently outside the scope of this app).
 
+## Requirements
+HTML5 Server Sent Events are are used in this app, so the use of modern browsers is implied. The app is tested and works flawlessly in the latest FireFox and Chrome browsers.
 
 Follow the installation steps, then the usage steps to begin:
-
 
 ## Installation
 
