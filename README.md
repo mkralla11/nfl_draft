@@ -1,6 +1,6 @@
 # Realtime NFL Draft
 
-An Nfl Draft application demonstrating the use of ActionController::Live, Server Sent Events, Redis, and an event driven, frameworkless frontend facilated by the jQuery library.
+An NFL Draft application demonstrating the use of ActionController::Live, Server Sent Events, Redis, and an event driven, frameworkless frontend facilated by the jQuery library.
 
 ## Notes
 
