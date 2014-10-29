@@ -8,7 +8,7 @@ If you don't care about the interesting details that encompass this application,
 
 The goal of this application was to explore newer rails features, as well as
 explore other lesser known yet awesome parts of rails. I wanted to be able
-to allow users to experience a nfl draft as it would occur in the real world,
+to allow users to experience an NFL draft as it would occur in the real world,
 meaning all users 'watching' the draft should see the draft actually happening.
 
 This app uses Puma as the web server. The app needs a persistent way to update all clients when the draft is occurring, so server sent events was the means to achieve this (web sockets seemed like overkill). Puma allows for true concurrency for rails, which is needed for these real-time features.
