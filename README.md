@@ -4,7 +4,7 @@ An Nfl Draft application demonstrating the use of ActionController::Live, Server
 
 ## Notes
 
-If you don't care about the interesting details that encompase this application, scroll down to the Requirements and Installation section to get started.
+If you don't care about the interesting details that encompass this application, scroll down to the Requirements and Installation section to get started.
 
 The goal of this application was to explore newer rails features, as well as
 explore other lesser known yet awesome parts of rails. I wanted to be able
