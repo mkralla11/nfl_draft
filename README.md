@@ -1,12 +1,14 @@
 # Realtime NFL Draft
 
-An Nfl Draft application demonstrating the use of ActionController::Live, Server Sent Events, Redis, and an event driven, frameworkless frontend facilated by the jQuery library.
+An NFL Draft application demonstrating the use of ActionController::Live, Server Sent Events, Redis, and an event driven, frameworkless frontend facilated by the jQuery library.
 
 ## Notes
 
+If you don't care about the interesting details that encompass this application, scroll down to the Requirements and Installation section to get started.
+
 The goal of this application was to explore newer rails features, as well as
 explore other lesser known yet awesome parts of rails. I wanted to be able
-to allow users to experience a nfl draft as it would occur in the real world,
+to allow users to experience an NFL draft as it would occur in the real world,
 meaning all users 'watching' the draft should see the draft actually happening.
 
 This app uses Puma as the web server. The app needs a persistent way to update all clients when the draft is occurring, so server sent events was the means to achieve this (web sockets seemed like overkill). Puma allows for true concurrency for rails, which is needed for these real-time features.
@@ -25,9 +27,10 @@ I did test out Sidekiq in place of Resque, but then soon realized the big hype a
 
 As for bugs, I witnessed only two. The first was when a user changes tabs while a draft is occurring, and then switches back to the live draft. This has to do with the SSE connection sometimes 'reconnecting' randomly on browser tab switching, causing a re-init of the app. I was able to mitigate that problem with some simple checks. Along those same lines, the queue I implemented on the frontend would build up when a user switched tabs, and then when they refocused the draft tab and paused the draft, the queue would continue dispersing the remaining drafts in the queue (not really an issue, as this is what 'should' technically happen). The second bug occurred when I manually stopped and restarted the server. Obviously this wouldn't happen (regularly) in a solid production environment, and even if it did, proper deployment strategies would be in place to swap out live draft workers correctly (currently outside the scope of this app).
 
+## Requirements
+HTML5 Server Sent Events are are used in this app, so the use of modern browsers is implied. The app is tested and works flawlessly in the latest Firefox and Chrome browsers.
 
 Follow the installation steps, then the usage steps to begin:
-
 
 ## Installation
 
@@ -74,3 +77,19 @@ There are a surplus of tasks that can be explore if you so desire (the names sho
 * draft_init:restart_draft
 
 
+## Your Turn<sup>TM</sup>
+
+Make this app more than just a side-project, and add your own flavor to it. All worthy pull requests will be merged. All you have to do is:
+0. Think of something awesome to incorporate (or use the Idea List below for inspiration)
+1. Fork it
+2. Create your flavor branch (`git checkout -b my-new-flavor`)
+3. Commit your changes and Push to the branch (`git commit -am 'Add some feature'`)(`git push origin my-new-flavor`)
+4. Create new Pull Request
+5. I will be happy to merge it
+
+## Idea List
+* **Manual Draft button**: first things first, finish implementing the Manual Draft button. Don't worry, I've already started it for you. The user should be able to toggle the button, and when it is active, the user should be able to click on any given player to trigger a specific draft for the current team.
+* **Implement accounts**: clearly this app needs users, roles and an Admin section. Go ahead and give it a shot!
+* **Create channels**: Multiple live drafts should be able to occur for different 'groups' of viewers, and could definitely be implemented by namespacing with Redis to create channels, similar to a chat room.
+* **Mobilize this app**: find a visually pleasing way to show the necessary live transitions within a smaller display.
+* **Implement Realtime Draft Timeline**: bonus points to who ever makes a slider control to animate the draft in reverse and to the current draft, only for the user sliding it.
