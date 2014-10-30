@@ -44,7 +44,14 @@ module Draft
 
     def self.pause(params)
       worker_pid = SiteConfig.worker_pid.as_integer
-      Process.kill("TERM", worker_pid)
+      # if there is no worker present, the app was incorrectly labelled
+      # start due to error, simply pause and publish
+      if worker_pid.present?
+        Process.kill("TERM", worker_pid)
+      else
+        SiteConfig.pause_draft!
+        $redis.publish('draft.pub_pause', {}.to_json);
+      end
     end
 
     def self.single_draft(params)
