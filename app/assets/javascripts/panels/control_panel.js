@@ -9,12 +9,11 @@ REALTIMEDRAFT.ControlPanel = function(){
 
 
   REALTIMEDRAFT.es.addEventListener("draft.pub_live_start", function(e){
-    self.draft_state = "start";
+    self.draft_state = "live";
     updateAllBtns();
   });
 
   REALTIMEDRAFT.es.addEventListener("draft.pub_start", function(e){
-    self.draft_state = "start";
     updateAllBtns();
   });
 
@@ -77,7 +76,7 @@ REALTIMEDRAFT.ControlPanel = function(){
   }
 
   function updateStateBtn(){
-    if(self.draft_state == "start"){
+    if(self.draft_state == "live"){
       self.draft_state_btn.text("Pause Live Draft");
     }
     else if(self.draft_state == "stop"){
@@ -102,7 +101,7 @@ REALTIMEDRAFT.ControlPanel = function(){
   };
 
   function oppositeOfState(){
-    if(self.draft_state == "start"){
+    if(self.draft_state == "live"){
       return "pause";
     }
     else{
@@ -125,7 +124,7 @@ REALTIMEDRAFT.ControlPanel = function(){
 
 
   function updateRestartBtn(){
-    if(self.draft_state == "start"){
+    if(self.draft_state == "live"){
       self.draft_restart_btn.addClass("disabled");
     }
     else{
@@ -159,7 +158,7 @@ REALTIMEDRAFT.ControlPanel = function(){
 
 
   function updateRandBtn(){
-    if(self.draft_state == "start"){
+    if(self.draft_state == "live"){
       self.draft_rand_btn.addClass("disabled");
     }
     else{
@@ -195,7 +194,7 @@ REALTIMEDRAFT.ControlPanel = function(){
 
   function updateManualBtn(options){
     options = options || {};
-    if(self.draft_state == "start"){
+    if(self.draft_state == "live"){
       self.draft_manual_btn.addClass("disabled");
       self.draft_manual_btn.removeClass("active");
     }

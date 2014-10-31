@@ -37,7 +37,7 @@ module Draft
     end
 
     def self.control_panel_json
-      {:draft_state=>SiteConfig.draft_state.as_string, :speed=>discern_speed}.to_json
+      {:draft_state=>SiteConfig.draft_state, :speed=>discern_speed}.to_json
     end
 
     def self.discern_speed

@@ -1,5 +1,5 @@
 class SiteConfig < ActiveRecord::Base
-  APPROVED = [ :draft_start_date, :draft_end_date, :draft_state, :worker_pid]
+  APPROVED = [ :draft_start_date, :draft_end_date]
 
   APPROVED.each do |name|
     name = name.to_s
@@ -49,50 +49,61 @@ class SiteConfig < ActiveRecord::Base
   # many times I have see it ruin a project
   # due to miss-use/overuse of callbacks
   def self.start_draft!
-    SiteConfig.draft_start_date.update_column(:as_datetime, DateTime.now) if SiteConfig.draft_state.as_string.blank?
-    SiteConfig.draft_state.update_column(:as_string, "start")
+    SiteConfig.draft_start_date.update_column(:as_datetime, DateTime.now) unless SiteConfig.draft_in_progress?
+  end
+
+  def self.live_draft!
+    $redis.set("draft_state", "live")
   end
 
   def self.pause_draft!
-    SiteConfig.draft_state.update_column(:as_string, "pause")
+    $redis.set("draft_state", "pause")
   end
 
+  def self.stop_draft!
+    $redis.set("draft_state", "stop")
+  end
+
+
+  def self.end_draft!
+    SiteConfig.draft_end_date.update_column(:as_datetime, DateTime.now)
+  end
 
   # does NOT drop all records, simply wipes start date of draft in site config,
   # and wipes picked_at and player_id from ownership
   def self.restart_draft!
     SiteConfig.draft_start_date.update_column(:as_datetime, nil)
     Ownership.update_all(:picked_at=>nil, :player_id=>nil)
-    SiteConfig.draft_state.update_column(:as_string, "stop")
+    SiteConfig.stop_draft!
   end
 
   def self.can_start_draft?
-    SiteConfig.draft_stopped? or SiteConfig.draft_paused?
+    SiteConfig.draft_stopped?
   end
 
   def self.can_pause_draft?
-    SiteConfig.draft_started?
+    SiteConfig.live_draft?
   end
 
   def self.can_restart_draft?
-    SiteConfig.draft_paused?
+    SiteConfig.draft_stopped?
   end
 
   def self.draft_in_progress?
-    SiteConfig.draft_paused? or SiteConfig.draft_started?
+    SiteConfig.draft_start_date.as_datetime.present? and SiteConfig.draft_end_date.as_datetime.blank?
   end
 
 
-  def self.draft_started?
-    SiteConfig.draft_state.as_string == "start"
+  def self.live_draft?
+    $redis.get("draft_state") == "live"
   end
 
-
-  def self.draft_paused?
-    SiteConfig.draft_state.as_string == "pause"
+  def self.draft_state
+    $redis.get("draft_state")
   end
 
   def self.draft_stopped?
-    SiteConfig.draft_state.as_string.blank? or SiteConfig.draft_state.as_string == "stop"
+    ds = $redis.get("draft_state")
+    ds.blank? or ds == "pause" or ds == "stop"
   end
 end

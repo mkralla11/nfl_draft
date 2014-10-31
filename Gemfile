@@ -9,7 +9,7 @@ gem 'redis'
 gem 'redis-namespace'
 gem 'smarter_csv'
 gem 'activerecord-import', '>= 0.4.0'
-gem 'resque'
+gem 'sucker_punch'
 
 gem 'sinatra', require: false
 gem 'slim'

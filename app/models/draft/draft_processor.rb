@@ -26,11 +26,12 @@ module Draft
         # only send official start message when draft start date is blank
         $redis.publish('draft.pub_start', params.to_json) unless SiteConfig.draft_in_progress?
         SiteConfig.start_draft!
+
         if params["single"] == "true"
           self.single_draft(params)
         else
           process_speed(params)
-          Resque.enqueue(DraftWorker, params.to_json)
+          DraftWorker.new.async.perform(params.to_json)
         end
       else
         $redis.publish('draft.pub_completed', params.to_json)
@@ -43,15 +44,8 @@ module Draft
     end
 
     def self.pause(params)
-      worker_pid = SiteConfig.worker_pid.as_integer
-      # if there is no worker present, the app was incorrectly labelled
-      # start due to error, simply pause and publish
-      if worker_pid.present?
-        Process.kill("TERM", worker_pid)
-      else
-        SiteConfig.pause_draft!
-        $redis.publish('draft.pub_pause', {}.to_json);
-      end
+      # DraftWorker will pause, and publish
+      SiteConfig.pause_draft!
     end
 
     def self.single_draft(params)
