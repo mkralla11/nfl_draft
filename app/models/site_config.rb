@@ -66,6 +66,7 @@ class SiteConfig < ActiveRecord::Base
 
 
   def self.end_draft!
+    SiteConfig.stop_draft!
     SiteConfig.draft_end_date.update_column(:as_datetime, DateTime.now)
   end
 
