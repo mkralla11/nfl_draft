@@ -3,7 +3,6 @@ class DraftWorker
   @queue = :draft_worker_queue
 
   def self.perform(params)
-    Rails.logger.info "\n\n\nProcess ID: #{Process.pid}\n\n\n"
     SiteConfig.set_worker_pid(Process.pid)
     params = JSON.parse(params)
     fail_safe_time = 8.minutes.from_now
