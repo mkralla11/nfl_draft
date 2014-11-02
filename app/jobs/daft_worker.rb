@@ -3,7 +3,7 @@ class DraftWorker
 
   def perform(params)
     params = JSON.parse(params)
-    fail_safe_time = 8.minutes.from_now
+    fail_safe_time = 17.minutes.from_now
     
     ActiveRecord::Base.connection_pool.with_connection do
       $redis.publish('draft.pub_live_start', params.to_json)
@@ -17,7 +17,7 @@ class DraftWorker
       if Ownership.has_drafts_left?
         $redis.publish('draft.pub_pause', params.to_json)
       else
-        $redis.publish('draft.pub_draft_complete', params)
+        $redis.publish('draft.pub_draft_complete', params.merge(:draft_state=>"stop").to_json)
         SiteConfig.end_draft!
       end
     end

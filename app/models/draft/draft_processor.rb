@@ -34,7 +34,7 @@ module Draft
           DraftWorker.new.async.perform(params.to_json)
         end
       else
-        $redis.publish('draft.pub_completed', params.to_json)
+        $redis.publish('draft.pub_draft_complete', params.to_json)
       end
     end
 
@@ -96,8 +96,8 @@ module Draft
       sse.write(params.to_json, {event: 'draft.pub_live_start'})
     end
 
-    def self.pub_completed(sse, params)
-      sse.write(params.to_json, {event: 'draft.pub_completed'})
+    def self.pub_draft_complete(sse, params)
+      sse.write(params.to_json, {event: 'draft.pub_draft_complete'})
     end
 
     def self.process_speed(params)
