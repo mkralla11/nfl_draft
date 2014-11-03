@@ -15,9 +15,9 @@ REALTIMEDRAFT.CommentaryPod = function(){
     html.push("<span class='notice'>The draft has been paused!</span>");
   });
 
-  REALTIMEDRAFT.es.addEventListener("draft.pub_draft_end", function(e){
-    html.push("<span class='success'>The draft has finished!</span>");
-  });
+  // REALTIMEDRAFT.es.addEventListener("draft.pub_draft_end", function(e){
+  //   draftFinished();
+  // });
 
   self.update = function(attrs){
     if(attrs != null && attrs.next_pick != null){

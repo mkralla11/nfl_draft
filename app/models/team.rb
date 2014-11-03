@@ -34,23 +34,21 @@ class Team < ActiveRecord::Base
 
 
   def self.make_next_draft!(params={})
-    if params["pick-type"] == "random"
-      owning = Ownership.next_to_draft
-      draftable_players = Player.undrafted
-      # call sample ruby core method to get 
-      # random element from ruby arr
-      owning.player_id = draftable_players.sample.player_id
-      owning.picked_at = DateTime.now
-      owning.save!
-    else
-      # pick-type == "manual"
-      # which means a user manually clicked
-      # on a player to draft them
-
+    if owning = Ownership.next_to_draft and undrafted_player_id = Player.undrafted.sample.try(:player_id)
+      if params["pick-type"] == "random"
+        # call sample ruby core method to get 
+        # random element from ruby arr
+        owning.player_id = undrafted_player_id
+        owning.picked_at = DateTime.now
+        owning.save!
+      else
+        # pick-type == "manual"
+        # which means a user manually clicked
+        # on a player to draft them
+      end
+      # re-query to include additional record assoc info
+      Ownership.completed_drafts.where("ownerships.id = #{owning.id}").first
     end
-
-    # re-query to include additional record assoc info
-    Ownership.completed_drafts.where("ownerships.id = #{owning.id}").first
   end
 
 end

@@ -22,13 +22,19 @@ REALTIMEDRAFT.ControlPanel = function(){
     updateAllBtns();
   });
 
-  REALTIMEDRAFT.es.addEventListener("draft.pub_draft_end", function(e){
-    self.draft_state = "end";
-    updateAllBtns();
-  });
+  // REALTIMEDRAFT.es.addEventListener("draft.pub_draft_end", function(e){
+  //   self.draft_state = "end";
+  //   updateAllBtns();
+  // });
 
+  // rely on the fact that next to pick team will be null when draft is
+  // officially over
   REALTIMEDRAFT.es.addEventListener("draft.pub_draft_made", function(e){
-    // console.log(e.data + "DRAFT MADE ControlPanel");
+    attrs = JSON.parse(e.data);
+    if(attrs.next_pick == null){
+      self.draft_state = "end";
+      updateAllBtns();
+    }
   });
   
    REALTIMEDRAFT.es.addEventListener("draft.pub_update_speed", function(e){
