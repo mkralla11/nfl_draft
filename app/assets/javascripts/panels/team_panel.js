@@ -8,16 +8,12 @@ REALTIMEDRAFT.TeamPanel = function(){
 
 
   function bindListeners(){
-    REALTIMEDRAFT.es.addEventListener("draft.team_panel_init", function(e){
-      var teams_j = JSON.parse(e.data);
+    REALTIMEDRAFT.es.addEventListener("draft.init", function(e){
+      var teams_j = JSON.parse(e.data).teams;
       disposeAllPods();
       initialize(teams_j);
       $(self).trigger("team_panel.initialized");
     })
-
-    REALTIMEDRAFT.es.addEventListener("draft.pub_draft_made", function(e){
-      console.log(e.data + " TeamPanel");
-    });
   };
 
 

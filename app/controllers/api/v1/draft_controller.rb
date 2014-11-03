@@ -4,6 +4,7 @@ module Api
       include ActionController::Live
       # around_filter :lock, :except=>:feed
       before_filter :draft_completion_filter, :only=>[:start, :update, :pause]
+      before_filter :setup_header, :setup_sse, :setup_redis, :disconnect_db, :only=>:feed
 
       # post
       def start
@@ -42,17 +43,24 @@ module Api
 
 
       def feed
-        response.headers['Content-Type'] = 'text/event-stream'
-        sse = SSE.new(response.stream)
+        Draft::DraftProcessor.init(@sse)
 
-        begin
-          Draft::DraftBuilder.init(sse)
-          Draft::DraftProcessor.bind_events(sse)
-        rescue IOError
-        # 
-        ensure
-          sse.close
+        heart_beat = Thread.new { loop { @sse.write 0; sleep 5 } }
+        publisher = Thread.new do
+          Draft::DraftProcessor.bind_events(@sse, @redis)
         end
+
+        heart_beat.join
+        publisher.join
+
+      rescue IOError
+      # 
+      ensure
+        Thread.kill(heart_beat) if heart_beat
+        Thread.kill(publisher) if publisher
+
+        @redis.quit
+        @sse.close
       end
 
 
@@ -65,6 +73,21 @@ module Api
         end
       end
 
+      def setup_header
+        response.headers['Content-Type'] = 'text/event-stream'
+      end
+
+      def setup_sse
+        @sse = SSE.new(response.stream)
+      end
+
+      def setup_redis
+        @redis = Redis::Namespace.new("nfl_draft", :redis => Redis.new(:url => $redis_uri))
+      end
+
+      def disconnect_db
+        ActiveRecord::Base.connection_pool.release_connection
+      end 
 
       def lock
         MUTEX.synchronize do

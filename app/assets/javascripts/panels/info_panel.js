@@ -13,11 +13,18 @@ REALTIMEDRAFT.InfoPanel = function(){
   }
 
   function bind(){
-    REALTIMEDRAFT.es.addEventListener("draft.info_panel_update", function(e){
-      var info_j = JSON.parse(e.data);
-      self.status_pod.update(info_j);
-      self.commentary_pod.update(info_j);
-    });
+    REALTIMEDRAFT.es.addEventListener("draft.init", 
+      updateInfoPods
+    );
+    REALTIMEDRAFT.es.addEventListener("draft.info_panel_update", 
+      updateInfoPods
+    );
+  }
+
+  function updateInfoPods(e){
+    var info_j = JSON.parse(e.data);
+    self.status_pod.update(info_j);
+    self.commentary_pod.update(info_j);
   }
 
 };

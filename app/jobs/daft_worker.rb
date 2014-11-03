@@ -17,7 +17,7 @@ class DraftWorker
       if Ownership.has_drafts_left?
         $redis.publish('draft.pub_pause', params.to_json)
       else
-        $redis.publish('draft.pub_draft_complete', params.merge(:draft_state=>"stop").to_json)
+        $redis.publish('draft.pub_draft_end', params.merge(:draft_state=>"stop").to_json)
         SiteConfig.end_draft!
       end
     end

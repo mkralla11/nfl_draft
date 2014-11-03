@@ -89,10 +89,11 @@ REALTIMEDRAFT.DraftBuilder = function(){
   }
 
   function bindFeed(){
-    REALTIMEDRAFT.es.addEventListener("draft.startup", function(e){
+    REALTIMEDRAFT.es.addEventListener("draft.init", function(e){
       disposeCenterPod();
       startup = JSON.parse(e.data);
       draft_pod = prepNextDraft(startup);
+      if(draft_pod == null){return false};
       self.element.append(draft_pod.element);
       draft_pod.centerPod();
     });
@@ -111,6 +112,7 @@ REALTIMEDRAFT.DraftBuilder = function(){
       executeDraft(cur_attrs, {
         complete: function(){
           draft_pod = prepNextDraft(cur_attrs);
+          if(draft_pod == null){return false};
           self.element.append(draft_pod.element);
           draft_pod.centerPod();
         }

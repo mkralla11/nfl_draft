@@ -39,9 +39,6 @@ class SiteConfig < ActiveRecord::Base
     end
   end
 
-  def self.set_worker_pid(pid)
-    SiteConfig.worker_pid.update_column(:as_integer, pid)
-  end
 
   # could have used state_machine gem for this,
   # but figured it was overkill, I also am not
@@ -66,7 +63,7 @@ class SiteConfig < ActiveRecord::Base
 
 
   def self.end_draft!
-    SiteConfig.stop_draft!
+    $redis.set("draft_state", "end")
     SiteConfig.draft_end_date.update_column(:as_datetime, DateTime.now)
   end
 
@@ -79,7 +76,7 @@ class SiteConfig < ActiveRecord::Base
   end
 
   def self.can_start_draft?
-    SiteConfig.draft_stopped?
+    SiteConfig.draft_stopped? and !SiteConfig.draft_ended?
   end
 
   def self.can_pause_draft?
@@ -96,7 +93,7 @@ class SiteConfig < ActiveRecord::Base
 
 
   def self.live_draft?
-    $redis.get("draft_state") == "live"
+    self.draft_state == "live"
   end
 
   def self.draft_state
@@ -104,7 +101,11 @@ class SiteConfig < ActiveRecord::Base
   end
 
   def self.draft_stopped?
-    ds = $redis.get("draft_state")
-    ds.blank? or ds == "pause" or ds == "stop"
+    ds = self.draft_state
+    ds.blank? or ds == "pause" or ds == "stop" or ds == "end"
+  end
+
+  def self.draft_ended?
+    self.draft_state == "end"
   end
 end

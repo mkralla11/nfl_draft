@@ -22,6 +22,11 @@ REALTIMEDRAFT.ControlPanel = function(){
     updateAllBtns();
   });
 
+  REALTIMEDRAFT.es.addEventListener("draft.pub_draft_end", function(e){
+    self.draft_state = "end";
+    updateAllBtns();
+  });
+
   REALTIMEDRAFT.es.addEventListener("draft.pub_draft_made", function(e){
     // console.log(e.data + "DRAFT MADE ControlPanel");
   });
@@ -33,7 +38,7 @@ REALTIMEDRAFT.ControlPanel = function(){
 
 
   function build(){
-    REALTIMEDRAFT.es.addEventListener("draft.control_panel_init", function(e){
+    REALTIMEDRAFT.es.addEventListener("draft.init", function(e){
       attrs = JSON.parse(e.data);
       self.draft_state = attrs.draft_state || "stop";
       REALTIMEDRAFT.speed = attrs.speed || 2.0;
@@ -77,13 +82,20 @@ REALTIMEDRAFT.ControlPanel = function(){
 
   function updateStateBtn(){
     if(self.draft_state == "live"){
+      self.draft_state_btn.removeClass("disabled");
       self.draft_state_btn.text("Pause Live Draft");
     }
     else if(self.draft_state == "stop"){
+      self.draft_state_btn.removeClass("disabled");
       self.draft_state_btn.text("Start Live Draft");
     }
-    else{
+    else if(self.draft_state == "pause"){
+      self.draft_state_btn.removeClass("disabled");
       self.draft_state_btn.text("Continue Live Draft");
+    }
+    else if(self.draft_state == "end"){
+      self.draft_state_btn.text("Draft Finished");
+      self.draft_state_btn.addClass("disabled");
     }
   }
 
@@ -158,7 +170,7 @@ REALTIMEDRAFT.ControlPanel = function(){
 
 
   function updateRandBtn(){
-    if(self.draft_state == "live"){
+    if(self.draft_state == "live" || self.draft_state == "end"){
       self.draft_rand_btn.addClass("disabled");
     }
     else{
@@ -194,7 +206,7 @@ REALTIMEDRAFT.ControlPanel = function(){
 
   function updateManualBtn(options){
     options = options || {};
-    if(self.draft_state == "live"){
+    if(self.draft_state == "live" || self.draft_state == "end"){
       self.draft_manual_btn.addClass("disabled");
       self.draft_manual_btn.removeClass("active");
     }

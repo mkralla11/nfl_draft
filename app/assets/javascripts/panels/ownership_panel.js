@@ -8,8 +8,8 @@ REALTIMEDRAFT.OwnershipPanel = function(){
 
 
   function bindListeners(){
-    REALTIMEDRAFT.es.addEventListener("draft.ownership_panel_init", function(e){
-      var ownerships_j = JSON.parse(e.data);
+    REALTIMEDRAFT.es.addEventListener("draft.init", function(e){
+      var ownerships_j = JSON.parse(e.data).ownerships;
       disposeAllPods();
       initialize(ownerships_j);
     })
@@ -35,7 +35,7 @@ REALTIMEDRAFT.OwnershipPanel = function(){
   // the new init json obj sent by server
   function disposeAllPods(){
     for(var id in self.ownership_pods){
-      if(self.ownership_pods.hasOwnProperty(id)){
+      if(self.ownership_pods.hasOwnProperty(id) && self.ownership_pods[id] != null){
         self.ownership_pods[id].dispose();
         self.ownership_pods[id] = null;
       }

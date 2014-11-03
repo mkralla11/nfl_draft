@@ -2,8 +2,12 @@ module Draft
   class DraftProcessor
     include Draft::FullDrafter
 
-    def self.bind_events(sse)
-      redis = Redis::Namespace.new("nfl_draft", :redis => Redis.new(:url => $redis_uri))
+    def self.init(sse)
+      sse.write(Draft::DraftBuilder.init_json, {event: 'draft.init'})
+    end
+
+
+    def self.bind_events(sse, redis)
       redis.psubscribe('draft.*') do |on|
         on.pmessage do |pattern, event, data|
           self.dispatch(event, sse, data)
@@ -22,19 +26,16 @@ module Draft
     # single random, and automatic drafting
     # dispatching accordingly
     def self.start(params)
-      if Ownership.has_drafts_left?
-        # only send official start message when draft start date is blank
-        $redis.publish('draft.pub_start', params.to_json) unless SiteConfig.draft_in_progress?
-        SiteConfig.start_draft!
+      # only send official start message when draft start date is blank
+      $redis.publish('draft.pub_start', params.to_json) unless SiteConfig.draft_in_progress?
+      SiteConfig.start_draft!
 
-        if params["single"] == "true"
-          self.single_draft(params)
-        else
-          process_speed(params)
-          DraftWorker.new.async.perform(params.to_json)
-        end
+      if params["single"] == "true"
+        self.single_draft(params)
+        self.discern_complete(params)
       else
-        $redis.publish('draft.pub_draft_complete', params.to_json)
+        process_speed(params)
+        DraftWorker.new.async.perform(params.to_json)
       end
     end
 
@@ -58,9 +59,17 @@ module Draft
 
     def self.restart(params)
       SiteConfig.restart_draft!
-      $redis.publish('draft.pub_restart', params.to_json)
+      $redis.publish('draft.pub_restart', Draft::DraftBuilder.init_json)
     end
     
+
+    def self.discern_complete(params)
+      if Ownership.no_drafts_left?
+        $redis.publish('draft.pub_draft_end', params.merge(:draft_state=>"end").to_json)
+        SiteConfig.end_draft!
+      end
+    end
+
 
 
 
@@ -82,7 +91,7 @@ module Draft
 
 
     def self.pub_restart(sse, params)
-      Draft::DraftBuilder.init(sse, {:restart=>true})
+      sse.write(params.to_json, {event: 'draft.init'})
     end
 
     def self.pub_draft_made(sse, params)
@@ -96,8 +105,8 @@ module Draft
       sse.write(params.to_json, {event: 'draft.pub_live_start'})
     end
 
-    def self.pub_draft_complete(sse, params)
-      sse.write(params.to_json, {event: 'draft.pub_draft_complete'})
+    def self.pub_draft_end(sse, params)
+      sse.write(params.to_json, {event: 'draft.pub_draft_end'})
     end
 
     def self.process_speed(params)

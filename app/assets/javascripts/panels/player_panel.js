@@ -7,8 +7,8 @@ REALTIMEDRAFT.PlayerPanel = function(){
 
 
   function bindListeners(){
-    REALTIMEDRAFT.es.addEventListener("draft.player_panel_init", function(e){
-      var players_j = JSON.parse(e.data);
+    REALTIMEDRAFT.es.addEventListener("draft.init", function(e){
+      var players_j = JSON.parse(e.data).players;
       disposeAllPods();
       initialize(players_j);
     })
