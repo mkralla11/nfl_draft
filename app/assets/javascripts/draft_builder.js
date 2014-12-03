@@ -7,7 +7,9 @@ REALTIMEDRAFT.DraftBuilder = function(){
       info_panel = null,
       element = null,
       draft_pod = null,
-      startup = null;
+      startup = null,
+      orig_speed = null,
+      boosting = false;
   
   var self = this;
   self.element = $("<div class='draft-layout'>");
@@ -106,6 +108,7 @@ REALTIMEDRAFT.DraftBuilder = function(){
   }
 
   function attemptDraft(){
+    // speedBooster();
     if(self.draft_queue.length != 0 && !self.prevPickInProgress){
       self.prevPickInProgress = true;
       var cur_attrs = self.draft_queue.shift();
@@ -164,4 +167,16 @@ REALTIMEDRAFT.DraftBuilder = function(){
     orphaned_center_pod.unbind();
     orphaned_center_pod.remove();
   }
+
+  // function speedBooster(){
+  //   if(!boosting && self.draft_queue.length > 4){
+  //     boosting = true;
+  //     orig_speed = REALTIMEDRAFT.speed;
+  //     REALTIMEDRAFT.speed = 0;
+  //   }
+  //   else if(orig_speed!=null && self.draft_queue.length < 4){
+  //     boosting = false;
+  //     REALTIMEDRAFT.speed = orig_speed;
+  //   }
+  // }
 };
