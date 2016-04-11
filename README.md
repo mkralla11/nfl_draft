@@ -2,26 +2,7 @@
 
 An NFL Draft application demonstrating the use of ActionController::Live, Server Sent Events, Redis, and an event driven, frameworkless frontend facilated by the jQuery library.
 
-## Notes
-
-If you don't care about the interesting details that encompass this application, scroll down to the Requirements and Installation section to get started.
-
-The goal of this application was to explore newer rails features, as well as
-explore other lesser known yet awesome parts of rails. I wanted to be able
-to allow users to experience an NFL draft as it would occur in the real world,
-meaning all users 'watching' the draft should see the draft actually happening.
-
-This app uses Puma as the web server. The app needs a persistent way to update all clients when the draft is occurring, so server sent events was the means to achieve this (web sockets seemed like overkill). Puma allows for true concurrency for rails, which is needed for these real-time features.
-
-Redis is used for its excellent pub/sub implementation. This, combined with the new ActionController::Live and Server Sent Events, allows for a powerful constant feed to clients. Finally, the use of Sucker Punch allows the NFL draft to continue even if the original client who initiated the live draft leaves (closes his/her browser). In that case, the draft will continue without a hiccup for all other subscribed clients just like a real 'live' event.
-
-On the frontend, I felt that js frameworks like Angular or Ember didn't fit the mold of this unique implementation. So I build the frontend from scratch in a well encapsulated, object-oriented manner. I made sure not to pollute the global namespace, as well as explicitly make sure garbage collection could occur on processed/unused objects. jQuery was used simply for it's excellent DOM traversal functions, and animation. By not tying myself to a large framework, the frontend is much lighter, which is crucial if a very fast draft speed is set and a live draft is currently in progress.
-
-If I could go back and redo the application, one thing I would change is changing calls to jQuery's 'animate' method to a sequentially stepped call to jQuery's css method. That way I would be able to implement the Realtime Draft Timeline slider, which would allow the traversal from the current draft, all the way 'back in time' to previous drafts. Now that would be cool.
-
-I tried out 3 different background job gems including Resque, Sidekiq, and Sucker Punch. In the end, I chose Sucker Punch for numerous reasons. First, it does not require multiple processes in comparison to Resque. Also, It seemlessly integrated with my deployment to Heroku in comparison with Sidekiq (not much time was spent with Sidekiq because I didn't need all the extra features that came with it; mostly just a personal preference after trying both of them out).
-
-As for bugs, I witnessed only two. The first was when a user changes tabs while a draft is occurring, and then switches back to the live draft. This has to do with the SSE connection sometimes 'reconnecting' randomly on browser tab switching, causing a re-init of the app. I was able to mitigate that problem with some simple checks. Along those same lines, the queue I implemented on the frontend would build up when a user switched tabs, and then when they refocused the draft tab and paused the draft, the queue would continue dispersing the remaining drafts in the queue (not really an issue, as this is what 'should' technically happen). The second bug occurred when I manually stopped and restarted the server. Obviously this wouldn't happen (regularly) in a solid production environment, and even if it did, proper deployment strategies would be in place to swap out live draft workers correctly (currently outside the scope of this app).
+![NFL Draft up and running](https://github.com/mkralla11/nfl_draft/raw/master/up_and_running.gif)
 
 ## Requirements
 HTML5 Server Sent Events are are used in this app, so the use of modern browsers is implied. The app is tested and works flawlessly in the latest Firefox and Chrome browsers.
@@ -70,6 +51,26 @@ There are a surplus of tasks that can be explore if you so desire (the names sho
 * draft_init:import:site_configs
 * draft_init:simulate_draft
 * draft_init:restart_draft
+
+
+## Notes
+
+The goal of this application was to explore newer rails features, as well as
+explore other lesser known yet awesome parts of rails. I wanted to be able
+to allow users to experience an NFL draft as it would occur in the real world,
+meaning all users 'watching' the draft should see the draft actually happening.
+
+This app uses Puma as the web server. The app needs a persistent way to update all clients when the draft is occurring, so server sent events was the means to achieve this (web sockets seemed like overkill). Puma allows for true concurrency for rails, which is needed for these real-time features.
+
+Redis is used for its excellent pub/sub implementation. This, combined with the new ActionController::Live and Server Sent Events, allows for a powerful constant feed to clients. Finally, the use of Sucker Punch allows the NFL draft to continue even if the original client who initiated the live draft leaves (closes his/her browser). In that case, the draft will continue without a hiccup for all other subscribed clients just like a real 'live' event.
+
+On the frontend, I felt that js frameworks like Angular or Ember didn't fit the mold of this unique implementation. So I build the frontend from scratch in a well encapsulated, object-oriented manner. I made sure not to pollute the global namespace, as well as explicitly make sure garbage collection could occur on processed/unused objects. jQuery was used simply for it's excellent DOM traversal functions, and animation. By not tying myself to a large framework, the frontend is much lighter, which is crucial if a very fast draft speed is set and a live draft is currently in progress.
+
+If I could go back and redo the application, one thing I would change is changing calls to jQuery's 'animate' method to a sequentially stepped call to jQuery's css method. That way I would be able to implement the Realtime Draft Timeline slider, which would allow the traversal from the current draft, all the way 'back in time' to previous drafts. Now that would be cool.
+
+I tried out 3 different background job gems including Resque, Sidekiq, and Sucker Punch. In the end, I chose Sucker Punch for numerous reasons. First, it does not require multiple processes in comparison to Resque. Also, It seemlessly integrated with my deployment to Heroku in comparison with Sidekiq (not much time was spent with Sidekiq because I didn't need all the extra features that came with it; mostly just a personal preference after trying both of them out).
+
+As for bugs, I witnessed only two. The first was when a user changes tabs while a draft is occurring, and then switches back to the live draft. This has to do with the SSE connection sometimes 'reconnecting' randomly on browser tab switching, causing a re-init of the app. I was able to mitigate that problem with some simple checks. Along those same lines, the queue I implemented on the frontend would build up when a user switched tabs, and then when they refocused the draft tab and paused the draft, the queue would continue dispersing the remaining drafts in the queue (not really an issue, as this is what 'should' technically happen). The second bug occurred when I manually stopped and restarted the server. Obviously this wouldn't happen (regularly) in a solid production environment, and even if it did, proper deployment strategies would be in place to swap out live draft workers correctly (currently outside the scope of this app).
 
 
 ## Your Turn<sup>TM</sup>
