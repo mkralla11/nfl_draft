@@ -13,7 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require ../../../vendor/assets/bootstrap-3.2.0/js/bootstrap.min
-//= require_tree ../../../vendor/assets/range_slider
+//= require ../../../vendor/assets/range_slider/jquery-ui.min
 //= require_tree ../../../vendor/assets/javascripts/shared
 //= require javascript_core_ext
 //= require realtime_draft
